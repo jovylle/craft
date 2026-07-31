@@ -59,7 +59,10 @@ export function createDataClient(deps: DataClientDeps = {}): DataClient {
     const hit = cache.get(key)
     if (hit) return hit as T
     const url = `${baseUrl}${path}`
-    const res = await fetchFn(url)
+    let res = await fetchFn(url)
+    if (!res.ok && res.status >= 500) {
+      res = await fetchFn(url) // single retry for flaky upstream 5xx
+    }
     if (!res.ok) throw new Error(`GET ${url} failed: ${res.status}`)
     const parsed = schema.parse(await res.json())
     cache.set(key, parsed)
