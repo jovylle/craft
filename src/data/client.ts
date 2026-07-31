@@ -16,6 +16,7 @@ export interface DataClient {
   getHomepage(): Promise<Homepage>
   getProfile(): Promise<Profile>
   getProjects(): Promise<Project[]>
+  getProject(slug: string): Promise<Project | undefined>
   getBlogIndex(): Promise<BlogPostSummary[]>
   getPost(slug: string): Promise<BlogPost | undefined>
   getSocial(): Promise<Social>
@@ -75,13 +76,16 @@ export function createDataClient(deps: DataClientDeps = {}): DataClient {
     }
   }
 
+  async function fetchProjectsNormalized() {
+    const { projects } = await getJsonWithFallback(ENDPOINTS.projects, ProjectsResponseSchema, 'projects')
+    return projects.map((p) => ({ ...p, thumbnail: absoluteUrl(p.thumbnail, baseUrl) }))
+  }
+
   return {
     getHomepage: () => getJsonWithFallback(ENDPOINTS.homepage, HomepageSchema, 'homepage'),
     getProfile: () => getJsonWithFallback(ENDPOINTS.profile, ProfileSchema, 'profile'),
-    async getProjects() {
-      const { projects } = await getJsonWithFallback(ENDPOINTS.projects, ProjectsResponseSchema, 'projects')
-      return projects.map((p) => ({ ...p, thumbnail: absoluteUrl(p.thumbnail, baseUrl) }))
-    },
+    getProjects: fetchProjectsNormalized,
+    getProject: async (slug) => (await fetchProjectsNormalized()).find((p) => p.slug === slug),
     getBlogIndex: async () => {
       const { posts } = await getJsonWithFallback(ENDPOINTS.blogIndex, BlogIndexResponseSchema, 'blogIndex')
       return posts

@@ -98,6 +98,7 @@ export function createMockClient(opts: MockClientOptions = {}): DataClient {
       if (failProjects) throw new Error('vault down')
       return projects
     },
+    getProject: async (slug) => projects.find((p) => p.slug === slug),
     getBlogIndex: async () => posts,
     getPost: async (slug) => (post && post.slug === slug ? post : undefined),
     getSocial: async () => socialFixture,
