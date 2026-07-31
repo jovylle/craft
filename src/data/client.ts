@@ -52,7 +52,7 @@ export function absoluteUrl(raw: string, baseUrl: string): string {
 }
 
 export function createDataClient(deps: DataClientDeps = {}): DataClient {
-  const { fetchFn = fetch, baseUrl = DEFAULT_BASE_URL, cacheTtlMs = 300_000, now } = deps
+  const { fetchFn = fetch, baseUrl = DEFAULT_BASE_URL, cacheTtlMs = 3_600_000, now } = deps
   const cache = deps.cache ?? new TtlCache<unknown>(cacheTtlMs, now)
 
   async function getJson<T>(path: string, schema: z.ZodType<T>, key: string): Promise<T> {
@@ -60,8 +60,9 @@ export function createDataClient(deps: DataClientDeps = {}): DataClient {
     if (hit) return hit as T
     const url = `${baseUrl}${path}`
     let res = await fetchFn(url)
-    if (!res.ok && res.status >= 500) {
-      res = await fetchFn(url) // single retry for flaky upstream 5xx
+    for (let attempt = 1; res.status >= 500 && attempt < 3; attempt++) {
+      await new Promise((r) => setTimeout(r, 100 * attempt))
+      res = await fetchFn(url)
     }
     if (!res.ok) throw new Error(`GET ${url} failed: ${res.status}`)
     const parsed = schema.parse(await res.json())

@@ -52,15 +52,27 @@ describe('createDataClient', () => {
     await expect(client.getProfile()).rejects.toThrow('failed')
   })
 
-  it('retries once on 5xx and serves the retried response', async () => {
+  it('retries up to three times on 5xx', async () => {
     const fetchFn = vi
       .fn()
+      .mockImplementationOnce(async () => new Response('down', { status: 503 }))
       .mockImplementationOnce(async () => new Response('down', { status: 503 }))
       .mockImplementationOnce(async () => jsonResponse(homepageFixture))
     const client = createDataClient({ fetchFn })
     const homepage = await client.getHomepage()
     expect(homepage.hero.title).toBe("It's me, Jovylle")
-    expect(fetchFn).toHaveBeenCalledTimes(2)
+    expect(fetchFn).toHaveBeenCalledTimes(3)
+  })
+
+  it('throws after three 5xx responses', async () => {
+    const fetchFn = vi
+      .fn()
+      .mockImplementationOnce(async () => new Response('down', { status: 503 }))
+      .mockImplementationOnce(async () => new Response('down', { status: 503 }))
+      .mockImplementationOnce(async () => new Response('down', { status: 503 }))
+    const client = createDataClient({ fetchFn })
+    await expect(client.getProfile()).rejects.toThrow('failed')
+    expect(fetchFn).toHaveBeenCalledTimes(3)
   })
 
   it('throws on malformed payloads', async () => {
