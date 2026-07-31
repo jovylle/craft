@@ -1,5 +1,6 @@
 import { Hono } from 'hono'
 import type { DataClient } from '../data/client'
+import { sortPosts } from '../data/sort'
 import { HomeView } from '../views/home'
 
 export function homeRoutes(data: DataClient, baseUrl: string): Hono {
@@ -18,9 +19,7 @@ export function homeRoutes(data: DataClient, baseUrl: string): Hono {
     const withThumbs = sorted.filter((p) => p.thumbnail)
     const featured = (withThumbs.length >= 3 ? withThumbs : sorted).slice(0, 6)
 
-    const recent = [...blogIndex]
-      .sort((a, b) => (b.date || '').localeCompare(a.date || ''))
-      .slice(0, 3)
+    const recent = sortPosts(blogIndex).slice(0, 3)
 
     return c.html(
       <HomeView

@@ -22,14 +22,13 @@ describe('GET /', () => {
     expect(html).toContain('https://content.jovylle.com/images/post/sfl-crab.png')
   })
 
-  it('shows the three latest posts (empty dates last)', async () => {
+  it('shows the latest real posts (scaffold posts excluded)', async () => {
     const html = await (await app.request('/')).text()
     const factoryIdx = html.indexOf('Project Factory')
     const cursorIdx = html.indexOf('Why I Used Cursor')
-    const blogPostIdx = html.indexOf('>blog-post<')
     expect(factoryIdx).toBeGreaterThan(-1)
     expect(factoryIdx).toBeLessThan(cursorIdx)
-    expect(cursorIdx).toBeLessThan(blogPostIdx)
+    expect(html).not.toContain('>blog-post<')
   })
 
   it('renders curated hero CTAs and social links', async () => {
