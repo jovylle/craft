@@ -17,3 +17,8 @@
 **Decisions made (see decisions.md):** B multi-page scope; dark-modern + pattern direction; repo/folder name craft; hero CTAs curated (data routes don't exist here); scaffold posts filtered from blog; home route degrades gracefully, /projects surfaces 500.
 
 **Next step (blocked on user):** user must approve execution + choose mode. Default = subagent-driven (option 1): task() per plan task, verify with npm test + typecheck after each, commit between tasks, then deploy (Task 12) + push (Task 13).
+
+## [2026-07-31] Task 1 — scaffold + smoke test done
+- Scaffolded Hono + TS + Vitest worker exactly per plan brief; `npm test` 1/1 green, `tsc --noEmit` exit 0.
+- Surprise: vitest 4 uses oxc by default and warns "oxc options will be used and esbuild options will be ignored" — the brief's `vitest.config.ts` esbuild/jsx block is inert. If hono/jsx tests misbehave later, move config to `oxc` key or pin vitest 3.
+- `npm ls hono marked zod`: hono@4.12.33, marked@18.0.7, zod@4.4.3.
