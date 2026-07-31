@@ -1,7 +1,6 @@
-import { Hono } from 'hono'
+import { createApp } from './app'
+import { createDataClient } from './data/client'
 
-const app = new Hono()
-
-app.get('/', (c) => c.text('craft'))
+const app = createApp({ data: createDataClient() })
 
 export default app
