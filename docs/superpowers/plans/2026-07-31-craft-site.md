@@ -1,6 +1,6 @@
 # Craft Site Implementation Plan
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [x]`) syntax for tracking.
 
 **Goal:** Build `craft` — a beautiful multi-page portfolio site for Jovylle, powered by the `content.jovylle.com` data vault, written in Hono + TypeScript, deployed to Cloudflare Workers at `craft.uft1.com`, pushed to `github.com/jovylle/craft`.
 
@@ -96,7 +96,7 @@ craft/
 **Interfaces:**
 - Produces: `npm test`/`npm run typecheck`/`npm run dev`/`npm run deploy` scripts; `src/index.ts` default export (Hono app).
 
-- [ ] **Step 1: Create `package.json`**
+- [x] **Step 1: Create `package.json`**
 
 ```json
 {
@@ -113,7 +113,7 @@ craft/
 }
 ```
 
-- [ ] **Step 2: Create `.nvmrc`, `tsconfig.json`, `wrangler.toml`, `vitest.config.ts`**
+- [x] **Step 2: Create `.nvmrc`, `tsconfig.json`, `wrangler.toml`, `vitest.config.ts`**
 
 `.nvmrc`:
 ```
@@ -167,7 +167,7 @@ export default defineConfig({
 })
 ```
 
-- [ ] **Step 3: Create `src/index.ts`**
+- [x] **Step 3: Create `src/index.ts`**
 
 ```ts
 import { Hono } from 'hono'
@@ -179,7 +179,7 @@ app.get('/', (c) => c.text('craft'))
 export default app
 ```
 
-- [ ] **Step 4: Create the failing test `test/smoke.test.ts`**
+- [x] **Step 4: Create the failing test `test/smoke.test.ts`**
 
 ```ts
 import { describe, it, expect } from 'vitest'
@@ -194,17 +194,17 @@ describe('smoke', () => {
 })
 ```
 
-- [ ] **Step 5: Install dependencies**
+- [x] **Step 5: Install dependencies**
 
 Run: `nvm use 20 && npm install hono marked zod && npm install -D typescript vitest wrangler @cloudflare/workers-types`
 Expected: clean install, lockfile created.
 
-- [ ] **Step 6: Run tests + typecheck**
+- [x] **Step 6: Run tests + typecheck**
 
 Run: `npm test && npm run typecheck`
 Expected: 1 passing test; `tsc` exits 0.
 
-- [ ] **Step 7: Commit**
+- [x] **Step 7: Commit**
 
 ```bash
 git add -A
@@ -222,7 +222,7 @@ git commit -m "chore: scaffold Hono + TypeScript + Vitest worker"
 **Interfaces:**
 - Produces: `Homepage`, `Profile`, `Project`, `BlogPostSummary`, `BlogPost`, `Social` types and their Zod schemas — consumed by Tasks 3, 6-11.
 
-- [ ] **Step 1: Write the failing test `test/schemas.test.ts`**
+- [x] **Step 1: Write the failing test `test/schemas.test.ts`**
 
 ```ts
 import { describe, it, expect } from 'vitest'
@@ -304,12 +304,12 @@ describe('schemas reject malformed payloads', () => {
 })
 ```
 
-- [ ] **Step 2: Run test to verify it fails**
+- [x] **Step 2: Run test to verify it fails**
 
 Run: `npx vitest run test/schemas.test.ts`
 Expected: FAIL — `Cannot find module '../src/data/schemas'`.
 
-- [ ] **Step 3: Write `src/data/schemas.ts`**
+- [x] **Step 3: Write `src/data/schemas.ts`**
 
 ```ts
 import { z } from 'zod'
@@ -410,12 +410,12 @@ export type BlogPost = z.infer<typeof BlogPostSchema>
 export type Social = z.infer<typeof SocialSchema>
 ```
 
-- [ ] **Step 4: Run tests to verify they pass**
+- [x] **Step 4: Run tests to verify they pass**
 
 Run: `npx vitest run test/schemas.test.ts && npm run typecheck`
 Expected: PASS (all 9 schema tests); `tsc` exits 0.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add src/data/schemas.ts test/schemas.test.ts
@@ -437,7 +437,7 @@ git commit -m "feat: zod schemas for all content vault endpoints"
 - Produces: `absoluteUrl(raw: string, baseUrl: string): string` and `DEFAULT_BASE_URL = 'https://content.jovylle.com'`
 - Consumes: schemas from Task 2.
 
-- [ ] **Step 1: Write the failing tests**
+- [x] **Step 1: Write the failing tests**
 
 `test/ttl-cache.test.ts`:
 ```ts
@@ -578,12 +578,12 @@ describe('absoluteUrl', () => {
 })
 ```
 
-- [ ] **Step 2: Run tests to verify they fail**
+- [x] **Step 2: Run tests to verify they fail**
 
 Run: `npx vitest run test/ttl-cache.test.ts test/client.test.ts`
 Expected: FAIL — modules not found.
 
-- [ ] **Step 3: Write `src/lib/ttl-cache.ts`**
+- [x] **Step 3: Write `src/lib/ttl-cache.ts`**
 
 ```ts
 interface CacheEntry<T> {
@@ -624,7 +624,7 @@ export class TtlCache<T> {
 }
 ```
 
-- [ ] **Step 4: Write `src/data/client.ts`**
+- [x] **Step 4: Write `src/data/client.ts`**
 
 ```ts
 import type { z } from 'zod'
@@ -725,12 +725,12 @@ export function createDataClient(deps: DataClientDeps = {}): DataClient {
 
 > Note: `now` is accepted in `DataClientDeps` and forwarded to the default cache so tests can control expiry without injecting a cache.
 
-- [ ] **Step 5: Run tests + typecheck**
+- [x] **Step 5: Run tests + typecheck**
 
 Run: `npx vitest run test/ttl-cache.test.ts test/client.test.ts && npm run typecheck`
 Expected: PASS (4 TtlCache + 8 client tests); `tsc` exits 0.
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add src/lib/ttl-cache.ts src/data/client.ts test/ttl-cache.test.ts test/client.test.ts
@@ -750,7 +750,7 @@ git commit -m "feat: data client with DI fetch, zod validation, ttl cache and st
 - Produces: `renderMarkdown(markdown: string): Promise<string>` — `marked.parse` (gfm, breaks) then `sanitizeHtml`.
 - Consumed by: Task 10 (`post.tsx`).
 
-- [ ] **Step 1: Write the failing tests**
+- [x] **Step 1: Write the failing tests**
 
 `test/sanitize.test.ts`:
 ```ts
@@ -827,12 +827,12 @@ describe('renderMarkdown', () => {
 })
 ```
 
-- [ ] **Step 2: Run tests to verify they fail**
+- [x] **Step 2: Run tests to verify they fail**
 
 Run: `npx vitest run test/sanitize.test.ts test/markdown.test.ts`
 Expected: FAIL — modules not found.
 
-- [ ] **Step 3: Write `src/lib/sanitize.ts`**
+- [x] **Step 3: Write `src/lib/sanitize.ts`**
 
 ```ts
 const ALLOWED_TAGS = new Set([
@@ -930,7 +930,7 @@ export function sanitizeHtml(html: string): string {
 }
 ```
 
-- [ ] **Step 4: Write `src/lib/markdown.ts`**
+- [x] **Step 4: Write `src/lib/markdown.ts`**
 
 ```ts
 import { marked } from 'marked'
@@ -942,12 +942,12 @@ export async function renderMarkdown(markdown: string): Promise<string> {
 }
 ```
 
-- [ ] **Step 5: Run tests + typecheck**
+- [x] **Step 5: Run tests + typecheck**
 
 Run: `npx vitest run test/sanitize.test.ts test/markdown.test.ts && npm run typecheck`
 Expected: PASS (8 sanitize + 4 markdown tests); `tsc` exits 0.
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add src/lib/sanitize.ts src/lib/markdown.ts test/sanitize.test.ts test/markdown.test.ts
@@ -967,7 +967,7 @@ git commit -m "feat: markdown renderer with allowlist sanitizer"
 - Produces: `formatDate(iso: string): string` (e.g. `"Jul 17, 2026"`).
 - Consumed by: all views (Tasks 6-10).
 
-- [ ] **Step 1: Write the failing tests**
+- [x] **Step 1: Write the failing tests**
 
 `test/dates.test.ts`:
 ```ts
@@ -1027,12 +1027,12 @@ describe('Layout', () => {
 > }
 > ```
 
-- [ ] **Step 2: Run tests to verify they fail**
+- [x] **Step 2: Run tests to verify they fail**
 
 Run: `npx vitest run test/dates.test.ts test/layout.test.ts`
 Expected: FAIL — modules not found.
 
-- [ ] **Step 3: Write `src/lib/dates.ts`**
+- [x] **Step 3: Write `src/lib/dates.ts`**
 
 ```ts
 export function formatDate(iso: string): string {
@@ -1043,7 +1043,7 @@ export function formatDate(iso: string): string {
 }
 ```
 
-- [ ] **Step 4: Write `src/lib/test-render.tsx`**
+- [x] **Step 4: Write `src/lib/test-render.tsx`**
 
 ```tsx
 import { jsx } from 'hono/jsx'
@@ -1055,7 +1055,7 @@ export function render(node: unknown): string {
 }
 ```
 
-- [ ] **Step 5: Write `src/views/layout.tsx`**
+- [x] **Step 5: Write `src/views/layout.tsx`**
 
 ```tsx
 import type { Child } from 'hono/jsx'
@@ -1164,7 +1164,7 @@ export function Layout({ title, description = '', path, socialLinks = [], childr
 > ```
 > The closing tags align with the fragment — the component body ends with `</html>` then `</>`, as written above.
 
-- [ ] **Step 6: Write `public/styles.css` (complete stylesheet)**
+- [x] **Step 6: Write `public/styles.css` (complete stylesheet)**
 
 ```css
 /* ============ Tokens ============ */
@@ -1623,7 +1623,7 @@ body::after {
 }
 ```
 
-- [ ] **Step 7: Write `public/favicon.svg` and `public/robots.txt`**
+- [x] **Step 7: Write `public/favicon.svg` and `public/robots.txt`**
 
 `public/favicon.svg`:
 ```svg
@@ -1645,12 +1645,12 @@ User-agent: *
 Allow: /
 ```
 
-- [ ] **Step 8: Run tests + typecheck**
+- [x] **Step 8: Run tests + typecheck**
 
 Run: `npx vitest run test/dates.test.ts test/layout.test.ts && npm run typecheck`
 Expected: PASS (4 dates + 2 layout tests); `tsc` exits 0.
 
-- [ ] **Step 9: Commit**
+- [x] **Step 9: Commit**
 
 ```bash
 git add src/views/layout.tsx src/lib/dates.ts src/lib/test-render.tsx public/styles.css public/favicon.svg public/robots.txt test/dates.test.ts test/layout.test.ts
@@ -1669,7 +1669,7 @@ git commit -m "feat: layout shell with layered backdrop and full stylesheet"
 - Produces: `<ProjectCard project baseUrl>` and `<PostCard post>` components (reused by Tasks 7 & 9).
 - Consumes: `DataClient` (Task 3), `Layout` (Task 5), schemas (Task 2).
 
-- [ ] **Step 1: Write `test/fixtures.ts` (shared mock data + fake client)**
+- [x] **Step 1: Write `test/fixtures.ts` (shared mock data + fake client)**
 
 ```ts
 import type { DataClient } from '../src/data/client'
@@ -1773,7 +1773,7 @@ export function createMockClient(opts: MockClientOptions = {}): DataClient {
 }
 ```
 
-- [ ] **Step 2: Write the failing test `test/home.test.ts`**
+- [x] **Step 2: Write the failing test `test/home.test.ts`**
 
 ```ts
 import { describe, it, expect } from 'vitest'
@@ -1826,12 +1826,12 @@ describe('GET /', () => {
 })
 ```
 
-- [ ] **Step 3: Run test to verify it fails**
+- [x] **Step 3: Run test to verify it fails**
 
 Run: `npx vitest run test/home.test.ts`
 Expected: FAIL — `Cannot find module '../src/routes/home'`.
 
-- [ ] **Step 4: Write `src/components/cards.tsx`**
+- [x] **Step 4: Write `src/components/cards.tsx`**
 
 ```tsx
 import type { Project, BlogPostSummary } from '../data/schemas'
@@ -1894,7 +1894,7 @@ export function PostCard({ post }: PostCardProps) {
 }
 ```
 
-- [ ] **Step 5: Write `src/views/home.tsx`**
+- [x] **Step 5: Write `src/views/home.tsx`**
 
 ```tsx
 import type { Homepage, Profile, Project, BlogPostSummary, Social } from '../data/schemas'
@@ -1997,7 +1997,7 @@ export function HomeView({ homepage, profile, featuredProjects, recentPosts, soc
 }
 ```
 
-- [ ] **Step 6: Write `src/routes/home.ts`**
+- [x] **Step 6: Write `src/routes/home.ts`**
 
 ```ts
 import { Hono } from 'hono'
@@ -2041,12 +2041,12 @@ export function homeRoutes(data: DataClient, baseUrl: string): Hono {
 }
 ```
 
-- [ ] **Step 7: Run tests + typecheck**
+- [x] **Step 7: Run tests + typecheck**
 
 Run: `npx vitest run test/home.test.ts && npm run typecheck`
 Expected: PASS (5 home tests); `tsc` exits 0.
 
-- [ ] **Step 8: Commit**
+- [x] **Step 8: Commit**
 
 ```bash
 git add src/views/home.tsx src/components/cards.tsx src/routes/home.ts test/fixtures.ts test/home.test.ts
@@ -2066,7 +2066,7 @@ git commit -m "feat: homepage with hero, featured projects, latest posts and mar
 - Produces: `projectsRoutes(data: DataClient, baseUrl: string): Hono` — `GET /projects`.
 - Consumes: `ProjectCard` (Task 6), `Layout` (Task 5).
 
-- [ ] **Step 1: Write the failing tests**
+- [x] **Step 1: Write the failing tests**
 
 `test/project-filter.test.ts`:
 ```ts
@@ -2145,12 +2145,12 @@ describe('GET /projects', () => {
 })
 ```
 
-- [ ] **Step 2: Run tests to verify they fail**
+- [x] **Step 2: Run tests to verify they fail**
 
 Run: `npx vitest run test/project-filter.test.ts test/projects.test.ts`
 Expected: FAIL — modules not found.
 
-- [ ] **Step 3: Write `src/client/project-filter.ts`**
+- [x] **Step 3: Write `src/client/project-filter.ts`**
 
 ```ts
 import type { Project } from '../data/schemas'
@@ -2182,7 +2182,7 @@ export function collectTags(projects: Project[], limit = 24): string[] {
 }
 ```
 
-- [ ] **Step 4: Write `src/views/projects.tsx`**
+- [x] **Step 4: Write `src/views/projects.tsx`**
 
 ```tsx
 import type { Project } from '../data/schemas'
@@ -2249,7 +2249,7 @@ export function ProjectsView({ projects, tags, socialLinks, baseUrl, path }: Pro
 
 > `SocialLink` import: `import type { SocialLink } from '../data/schemas'` — add to the imports.
 
-- [ ] **Step 5: Write `src/routes/projects.ts`**
+- [x] **Step 5: Write `src/routes/projects.ts`**
 
 ```ts
 import { Hono } from 'hono'
@@ -2278,7 +2278,7 @@ export function projectsRoutes(data: DataClient, baseUrl: string): Hono {
 }
 ```
 
-- [ ] **Step 6: Write `public/app.js` (vanilla filter glue — mirrors `applyFilter` semantics)**
+- [x] **Step 6: Write `public/app.js` (vanilla filter glue — mirrors `applyFilter` semantics)**
 
 ```js
 /* Craft — projects filter. Mirrors src/client/project-filter.ts semantics. */
@@ -2330,16 +2330,16 @@ export function projectsRoutes(data: DataClient, baseUrl: string): Hono {
 })()
 ```
 
-- [ ] **Step 7: Run tests + typecheck**
+- [x] **Step 7: Run tests + typecheck**
 
 Run: `npx vitest run test/project-filter.test.ts test/projects.test.ts && npm run typecheck`
 Expected: PASS (5 filter + 2 projects tests); `tsc` exits 0.
 
-- [ ] **Step 8: Manual verification of the filter script**
+- [x] **Step 8: Manual verification of the filter script**
 
 Run: `npm run dev` then open `http://localhost:8787/projects` — type in the search box (e.g. "chat") and click a tag button; the grid filters and the empty state appears when nothing matches.
 
-- [ ] **Step 9: Commit**
+- [x] **Step 9: Commit**
 
 ```bash
 git add src/client/project-filter.ts src/views/projects.tsx src/routes/projects.ts public/app.js test/project-filter.test.ts test/projects.test.ts
@@ -2358,7 +2358,7 @@ git commit -m "feat: projects page with search and tag filtering"
 - Produces: `projectDetailRoutes(data: DataClient, baseUrl: string): Hono` — `GET /projects/:slug` (404 → `NotFoundView`).
 - Produces: `<NotFoundView path message?>` — shared by Tasks 10 & 11.
 
-- [ ] **Step 1: Write the failing test `test/project-detail.test.ts`**
+- [x] **Step 1: Write the failing test `test/project-detail.test.ts`**
 
 ```ts
 import { describe, it, expect } from 'vitest'
@@ -2390,12 +2390,12 @@ describe('GET /projects/:slug', () => {
 })
 ```
 
-- [ ] **Step 2: Run test to verify it fails**
+- [x] **Step 2: Run test to verify it fails**
 
 Run: `npx vitest run test/project-detail.test.ts`
 Expected: FAIL — modules not found.
 
-- [ ] **Step 3: Write `src/views/not-found.tsx`**
+- [x] **Step 3: Write `src/views/not-found.tsx`**
 
 ```tsx
 import { Layout } from './layout'
@@ -2421,7 +2421,7 @@ export function NotFoundView({ path, message = 'The page you are looking for doe
 }
 ```
 
-- [ ] **Step 4: Write `src/views/project-detail.tsx`**
+- [x] **Step 4: Write `src/views/project-detail.tsx`**
 
 ```tsx
 import type { Project, SocialLink } from '../data/schemas'
@@ -2497,7 +2497,7 @@ export function ProjectDetailView({ project, socialLinks, baseUrl, path }: Proje
 }
 ```
 
-- [ ] **Step 5: Write `src/routes/project-detail.ts`**
+- [x] **Step 5: Write `src/routes/project-detail.ts`**
 
 ```ts
 import { Hono } from 'hono'
@@ -2534,12 +2534,12 @@ async getProject(slug) {
 }
 ```
 
-- [ ] **Step 6: Run tests + typecheck**
+- [x] **Step 6: Run tests + typecheck**
 
 Run: `npx vitest run test/project-detail.test.ts && npm run typecheck`
 Expected: PASS (2 detail tests); `tsc` exits 0. If `fixtures.ts` mock lacks `getProject`, add it: `getProject: async (slug) => projects.find((p) => p.slug === slug)`.
 
-- [ ] **Step 7: Commit**
+- [x] **Step 7: Commit**
 
 ```bash
 git add src/views/project-detail.tsx src/views/not-found.tsx src/routes/project-detail.ts src/data/client.ts test/project-detail.test.ts test/fixtures.ts
@@ -2558,7 +2558,7 @@ git commit -m "feat: project detail page with 404 handling"
 - Produces: `blogRoutes(data: DataClient, baseUrl: string): Hono` — `GET /blog` (featured first, then by date desc, empty dates last).
 - Consumes: `PostCard` (Task 6), `Layout` (Task 5).
 
-- [ ] **Step 1: Write the failing test `test/blog.test.ts`**
+- [x] **Step 1: Write the failing test `test/blog.test.ts`**
 
 ```ts
 import { describe, it, expect } from 'vitest'
@@ -2589,12 +2589,12 @@ describe('GET /blog', () => {
 })
 ```
 
-- [ ] **Step 2: Run test to verify it fails**
+- [x] **Step 2: Run test to verify it fails**
 
 Run: `npx vitest run test/blog.test.ts`
 Expected: FAIL — modules not found.
 
-- [ ] **Step 3: Write `src/views/blog.tsx`**
+- [x] **Step 3: Write `src/views/blog.tsx`**
 
 ```tsx
 import type { BlogPostSummary, SocialLink } from '../data/schemas'
@@ -2627,7 +2627,7 @@ export function BlogView({ posts, socialLinks, path }: BlogViewProps) {
 }
 ```
 
-- [ ] **Step 4: Write `src/routes/blog.ts`**
+- [x] **Step 4: Write `src/routes/blog.ts`**
 
 ```ts
 import { Hono } from 'hono'
@@ -2654,7 +2654,7 @@ export function blogRoutes(data: DataClient, baseUrl: string): Hono {
 
 > The `filter((p) => ...)` drops draft/empty scaffold posts (e.g. `blog-post`, `blog-post123`) from the list. Keep the same filter on the homepage in Task 6 — update `homeRoutes` `recent` to reuse it (extract to `src/data/sort.ts`: `sortPosts(posts: BlogPostSummary[]): BlogPostSummary[]` and `isRealPost(p)`, used by both).
 
-- [ ] **Step 5: Write `src/data/sort.ts` + update Task 6 home route to use it**
+- [x] **Step 5: Write `src/data/sort.ts` + update Task 6 home route to use it**
 
 ```ts
 import type { BlogPostSummary } from './schemas'
@@ -2701,12 +2701,12 @@ Update `test/blog.test.ts` — drop the empty-title ordering assertion:
   })
 ```
 
-- [ ] **Step 6: Run tests + typecheck**
+- [x] **Step 6: Run tests + typecheck**
 
 Run: `npx vitest run test/blog.test.ts test/home.test.ts && npm run typecheck`
 Expected: PASS (2 blog + 5 home tests); `tsc` exits 0.
 
-- [ ] **Step 7: Commit**
+- [x] **Step 7: Commit**
 
 ```bash
 git add src/views/blog.tsx src/routes/blog.ts src/data/sort.ts src/routes/home.ts test/blog.test.ts
@@ -2725,7 +2725,7 @@ git commit -m "feat: blog list page with featured-first ordering"
 - Produces: `postRoutes(data: DataClient, baseUrl: string): Hono` — `GET /blog/:slug` renders markdown; 404 → `NotFoundView`.
 - Consumes: `renderMarkdown` (Task 4), `NotFoundView` (Task 8), `formatDate` (Task 5).
 
-- [ ] **Step 1: Write the failing test `test/post.test.ts`**
+- [x] **Step 1: Write the failing test `test/post.test.ts`**
 
 ```ts
 import { describe, it, expect } from 'vitest'
@@ -2754,12 +2754,12 @@ describe('GET /blog/:slug', () => {
 })
 ```
 
-- [ ] **Step 2: Run test to verify it fails**
+- [x] **Step 2: Run test to verify it fails**
 
 Run: `npx vitest run test/post.test.ts`
 Expected: FAIL — modules not found.
 
-- [ ] **Step 3: Write `src/views/post.tsx`**
+- [x] **Step 3: Write `src/views/post.tsx`**
 
 ```tsx
 import type { BlogPost, SocialLink } from '../data/schemas'
@@ -2799,7 +2799,7 @@ export function PostView({ post, bodyHtml, socialLinks, path }: PostViewProps) {
 }
 ```
 
-- [ ] **Step 4: Write `src/routes/post.ts`**
+- [x] **Step 4: Write `src/routes/post.ts`**
 
 ```ts
 import { Hono } from 'hono'
@@ -2825,12 +2825,12 @@ export function postRoutes(data: DataClient, baseUrl: string): Hono {
 }
 ```
 
-- [ ] **Step 5: Run tests + typecheck**
+- [x] **Step 5: Run tests + typecheck**
 
 Run: `npx vitest run test/post.test.ts && npm run typecheck`
 Expected: PASS (2 post tests); `tsc` exits 0.
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add src/views/post.tsx src/routes/post.ts test/post.test.ts
@@ -2850,7 +2850,7 @@ git commit -m "feat: blog post page with server-rendered markdown"
 - Produces: `createApp(deps: { data: DataClient; baseUrl?: string }): Hono` — composes all five route factories, notFound → `NotFoundView`, onError → 500 page.
 - Consumes: all route factories (Tasks 6-10), `NotFoundView` (Task 8).
 
-- [ ] **Step 1: Write the failing test `test/routes.test.ts`**
+- [x] **Step 1: Write the failing test `test/routes.test.ts`**
 
 ```ts
 import { describe, it, expect } from 'vitest'
@@ -2912,12 +2912,12 @@ describe('composed app', () => {
 })
 ```
 
-- [ ] **Step 2: Run test to verify it fails**
+- [x] **Step 2: Run test to verify it fails**
 
 Run: `npx vitest run test/routes.test.ts`
 Expected: FAIL — `Cannot find module '../src/app'`.
 
-- [ ] **Step 3: Write `src/app.ts`**
+- [x] **Step 3: Write `src/app.ts`**
 
 ```ts
 import { Hono } from 'hono'
@@ -2957,7 +2957,7 @@ export function createApp({ data, baseUrl = 'https://content.jovylle.com' }: App
 }
 ```
 
-- [ ] **Step 4: Update `src/index.ts`**
+- [x] **Step 4: Update `src/index.ts`**
 
 ```ts
 import { createApp } from './app'
@@ -2968,7 +2968,7 @@ const app = createApp({ data: createDataClient() })
 export default app
 ```
 
-- [ ] **Step 5: Update `test/smoke.test.ts` (home now renders HTML)**
+- [x] **Step 5: Update `test/smoke.test.ts` (home now renders HTML)**
 
 ```ts
 import { describe, it, expect } from 'vitest'
@@ -2985,16 +2985,16 @@ describe('smoke', () => {
 
 > Note: `app.request('https://example.com/')` — Hono's `request` accepts a full URL; the mock data layer never hits the network (injected client), so this is hermetic.
 
-- [ ] **Step 6: Run the full suite + typecheck**
+- [x] **Step 6: Run the full suite + typecheck**
 
 Run: `npm test && npm run typecheck`
 Expected: ALL tests pass (smoke, schemas, ttl-cache, client, sanitize, markdown, dates, layout, home, project-filter, projects, project-detail, blog, post, routes); `tsc` exits 0.
 
-- [ ] **Step 7: Manual dev-server check**
+- [x] **Step 7: Manual dev-server check**
 
 Run: `npm run dev` — visit `/`, `/projects`, `/projects/sfl-crab`, `/blog`, `/blog/project-factory-500-autonomous-ai-apps`, and a bogus path. Confirm real vault content renders, filter works, and the 404 page shows.
 
-- [ ] **Step 8: Commit**
+- [x] **Step 8: Commit**
 
 ```bash
 git add src/app.ts src/index.ts test/routes.test.ts test/smoke.test.ts
@@ -3009,22 +3009,22 @@ git commit -m "feat: compose app with 404/500 handling and full route test suite
 - Modify: `wrangler.toml` (add custom-domain route)
 - Test: live curl checks
 
-- [ ] **Step 1: Typecheck + test gate**
+- [x] **Step 1: Typecheck + test gate**
 
 Run: `npm run typecheck && npm test`
 Expected: both pass.
 
-- [ ] **Step 2: Deploy to the workers.dev preview**
+- [x] **Step 2: Deploy to the workers.dev preview**
 
 Run: `npx wrangler deploy`
 Expected: success output with URL like `https://craft.<account-subdomain>.workers.dev`.
 
-- [ ] **Step 3: Verify the deployed worker**
+- [x] **Step 3: Verify the deployed worker**
 
 Run: `curl -sI https://craft.<account-subdomain>.workers.dev/ | head -5` and `curl -s https://craft.<account-subdomain>.workers.dev/ | grep -o '<title>[^<]*</title>'`
 Expected: `200` and `<title>Home — craft</title>`.
 
-- [ ] **Step 4: Add the custom domain route**
+- [x] **Step 4: Add the custom domain route**
 
 Modify `wrangler.toml`:
 ```toml
@@ -3036,7 +3036,7 @@ routes = [
 Run: `npx wrangler deploy`
 Expected: custom domain `craft.uft1.com` attaches. If wrangler errors with a zone/verification issue, add the domain via the dashboard instead: **Cloudflare dashboard → Workers & Pages → craft → Settings → Domains & Routes → Add → craft.uft1.com** (the zone is already on the account). Re-run `wrangler deploy` after.
 
-- [ ] **Step 5: Verify live routes**
+- [x] **Step 5: Verify live routes**
 
 Run:
 ```bash
@@ -3047,7 +3047,7 @@ curl -s -o /dev/null -w '%{http_code}\n' https://craft.uft1.com/does-not-exist
 ```
 Expected: `200`, card count > 0, post title present, `404`.
 
-- [ ] **Step 6: Commit the route config**
+- [x] **Step 6: Commit the route config**
 
 ```bash
 git add wrangler.toml
@@ -3063,7 +3063,7 @@ git commit -m "chore: attach craft.uft1.com custom domain"
 - Modify: `/Volumes/DevSSD/fore/lab/PROJECTS.md` (add craft row)
 - Test: CI run + push verification
 
-- [ ] **Step 1: Write `.github/workflows/ci.yml`**
+- [x] **Step 1: Write `.github/workflows/ci.yml`**
 
 ```yaml
 name: CI
@@ -3087,7 +3087,7 @@ jobs:
       - run: npm test
 ```
 
-- [ ] **Step 2: Write `.github/workflows/deploy.yml`**
+- [x] **Step 2: Write `.github/workflows/deploy.yml`**
 
 ```yaml
 name: Deploy
@@ -3117,7 +3117,7 @@ jobs:
 
 > Secrets: add `CLOUDFLARE_API_TOKEN` (Workers Scripts:Edit) and `CLOUDFLARE_ACCOUNT_ID` to the repo settings → Secrets and variables → Actions. If the custom-domain route from Task 12 requires dashboard approval, the deploy action still publishes the script; the route persists once approved.
 
-- [ ] **Step 3: Write `README.md`**
+- [x] **Step 3: Write `README.md`**
 
 ```markdown
 # craft
@@ -3168,7 +3168,7 @@ Push to `main` also deploys via GitHub Actions (requires `CLOUDFLARE_API_TOKEN` 
 Content updates are picked up automatically (cached ~5 min per isolate).
 ```
 
-- [ ] **Step 4: Create and push the GitHub repo**
+- [x] **Step 4: Create and push the GitHub repo**
 
 Run:
 ```bash
@@ -3179,12 +3179,12 @@ gh repo create jovylle/craft --public --source . --remote origin --push
 ```
 Expected: repo created at `https://github.com/jovylle/craft`, branch pushed, CI + Deploy workflows start.
 
-- [ ] **Step 5: Verify CI + deploy**
+- [x] **Step 5: Verify CI + deploy**
 
 Run: `gh run list --limit 3`
 Expected: `CI` passes; if `Deploy` ran, it passes after secrets are set. Set the two secrets if not already present (see Step 2 note).
 
-- [ ] **Step 6: Update the lab registry `PROJECTS.md`**
+- [x] **Step 6: Update the lab registry `PROJECTS.md`**
 
 Add a row to the **Live URLs** table and the **Cloudflare Workers / Pages** table (file: `/Volumes/DevSSD/fore/lab/PROJECTS.md`):
 
@@ -3196,7 +3196,7 @@ Add a row to the **Live URLs** table and the **Cloudflare Workers / Pages** tabl
 |---|---|---|
 | **craft** | `npx wrangler deploy` (in `craft/`) | Custom domain on uft1.com zone; CI deploys on push |
 
-- [ ] **Step 7: Final verification**
+- [x] **Step 7: Final verification**
 
 Run: `curl -sI https://craft.uft1.com/ | head -1` and `npm test` in `craft/`.
 Expected: `200` and a green suite.
